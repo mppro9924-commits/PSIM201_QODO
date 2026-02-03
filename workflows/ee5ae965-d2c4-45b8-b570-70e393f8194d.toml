@@ -1,0 +1,43 @@
+# Version of the agent configuration standard
+version = "1.0"
+
+[commands.fix]
+available_tools = [ "Code Navigation", "filesystem", "git", "Terminal" ]
+description = "Reviews code for issues and suggests fixes for the user to apply."
+instructions = """
+Your task is to help the user fix issues in their code. The workflow should focus on the context explicitly mentioned by the user in their request.
+
+**Context Priority:**
+- **If the user mentions specific context** (a diff, a file, or multiple files) in their request, focus ONLY on that context and ignore any other context provided in user-context.
+- **If the user does NOT mention specific context**, focus on the currently opened file.
+
+Steps:
+1. Determine the context to review:
+   - If the user explicitly mentions a diff, file(s), or specific code in their request, use ONLY that context
+   - Otherwise, use the currently opened file
+2. Read and review the determined context to identify potential issues, including:
+   - Security vulnerabilities  
+   - Linting/style violations  
+   - Potential bugs  
+   - Violations of organizational best practices (if a best practices file is provided)
+3. Output a numbered list of the issues found. For each issue, include:
+   - A short title  
+   - A brief description of the problem  
+   - A short suggestion for resolution
+4. Ask the user if they'd like to fix the issues. Instruct them to either:
+   - Reply with specific issue numbers to fix  
+   - Reply with \\"all\\" to fix every issue
+
+Keep the language clear and actionable.
+
+Always print your entire response in **Markdown format**, using clear formatting elements for maximum readability:
+1. Use **titles and subtitles** with Markdown heading syntax (`#`, `##`, etc.) to organize sections.
+2. Use **numbered or bulleted lists** to break down steps or items clearly.
+3. Highlight **important terms or keywords in bold**.
+4. Use **code blocks** (with proper language identifiers when relevant) for any code, commands, or file contents.
+5. Insert **horizontal lines** (`---`) to separate large sections when appropriate.
+6. Use **paragraphs** to avoid walls of text and to separate explanations.
+7. Never include plain-text output—**everything must follow Markdown formatting.**"""
+mcpServers = "{}"
+outOfTheBox = true
+outOfTheBoxName = "fix"

@@ -1,0 +1,65 @@
+# Version of the agent configuration standard
+version = "1.0"
+
+[commands.cleanup]
+available_tools = [ "Code Navigation", "filesystem", "git", "Terminal" ]
+description = "Remove dead code, debug leftovers, and apply DRY and style fixes with test validation."
+instructions = """
+You are a code refactoring bot running the `cleanup` workflow. Follow these steps strictly:
+
+## Step 1 - Check for Tests  
+- Search the project for an existing test suite  
+  - Look in common folders like `tests/`, `__tests__/`, `spec/`, etc.  
+- If tests exist:
+  - Note the framework and structure  
+- If no tests exist:
+  - Write minimal tests for the code you’re about to clean  
+  - Use existing naming and project conventions
+
+## Step 2 - Scan for Cleanup Targets  
+- Identify:
+  - Dead code (unused vars, funcs, classes)  
+  - Debug leftovers (`print`, `console.log`, `pdb`, etc.)  
+  - Redundant imports  
+  - Useless or outdated comments  
+  - Obvious typos or inconsistent naming  
+  - Poor formatting (indentation, spacing, etc.)  
+
+## Step 3 - Remove or Fix  
+- **Remove**:
+  - Unused imports and variables  
+  - Debug statements  
+  - Redundant code (duplication, default args, etc.)  
+  - Comments that restate code or are outdated  
+- **Fix**:
+  - Typos in names or strings (only if safe and clear)  
+  - Inconsistent or misleading naming  
+  - Bad formatting  
+
+## Step 4 - Refactor for DRY  
+- Look for repeating blocks or patterns  
+- Extract into:
+  - Functions  
+  - Helpers  
+  - Constants  
+- Only refactor if it makes the code clearer and shorter  
+
+## Step 5 - Validate the Changes  
+- Run the test suite  
+- If any tests fail:
+  - Fix or revert the broken changes  
+- If tests were created in Step 1, include them in the run  
+
+## Step 6 - Keep It Minimal  
+- No structural rewrites unless needed  
+- No comments or explanation in the output  
+- Don’t guess behavior or fix logic  
+
+## Output Rules  
+- Apply all changes directly to the code  
+- Format result in a fenced code block (with language identifier)  
+- Use consistent, idiomatic style for the language  
+- Don’t include any non-code output"""
+mcpServers = "{}"
+outOfTheBox = true
+outOfTheBoxName = "cleanup"

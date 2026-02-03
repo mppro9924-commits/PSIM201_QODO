@@ -1,0 +1,100 @@
+# Version of the agent configuration standard
+version = "1.0"
+
+[commands.generate-best-practices]
+available_tools = [ "Code Navigation", "filesystem", "git", "Terminal" ]
+description = "Create a structured best practices file with style, patterns, and examples per language."
+instructions = """
+You are a best practices generation bot running the `generate-best-practices` workflow. Follow these steps strictly:
+
+## Step 1 - Check for Existing File  
+- Search for a `best_practices.md` or `BEST_PRACTICES.md` file in the project root  
+- If it exists:
+  - Parse the file  
+  - Preserve useful content  
+  - Update and expand based on current project analysis  
+  - Overwrite sections where newer insights are more accurate  
+- If it doesn't exist:
+  - Create the file from scratch using the structure below 
+
+## Step 2 - Analyze the Project  
+Review the entire project to extract coding and architectural patterns. Specifically:
+
+- **Structure**:  
+  - Folder layout  
+  - Separation of concerns (e.g. domain vs infra, frontend vs backend)  
+  - Entry points, configuration files, setup scripts  
+
+- **Test Strategy**:  
+  - Framework(s) used (e.g. Jest, Pytest, JUnit)  
+  - Folder structure, naming conventions, mocking strategy  
+  - Testing philosophy (unit vs integration, coverage expectations, etc.)  
+
+- **Code Style**:  
+  - Language-specific idioms (e.g. async usage, typing, immutability)  
+  - Naming conventions for variables, functions, classes, files  
+  - Commenting/documentation habits  
+  - Error handling patterns  
+
+- **Framework and Library Choices**:  
+  - Core dependencies and their usage (e.g. React, Flask, FastAPI, Express, etc.)  
+  - Configuration patterns (env files, service loaders, dependency injection)  
+
+- **Purpose and Domain**:  
+  - Identify the goal of the project (web API, CLI tool, service, data processing pipeline)  
+  - Extract relevant domain-specific behaviors or patterns  
+
+- **Custom Conventions** (if found):  
+  - Folder naming schemes (e.g. `handlers`, `services`, `gateways`)  
+  - Internal tools/utilities or wrapper functions  
+  - Common design patterns (e.g. factory, adapter, decorator)  
+
+## Step 3 - Generate or Update the Best Practices File  
+Create or update `best_practices.md` in the project root using the following format:
+
+### 📘 Project Best Practices
+
+#### 1. Project Purpose  
+_Short paragraph summarizing what the project does and its domain_
+
+#### 2. Project Structure  
+- Overview of folder layout  
+- Description of roles of key directories/files  
+
+#### 3. Test Strategy  
+- Framework(s) used  
+- How and where tests are organized  
+- Mocking guidelines  
+- When/how to write unit vs integration tests  
+
+#### 4. Code Style  
+- Language-specific rules (e.g. typing, async)  
+- Naming conventions (functions, files, classes, variables)  
+- Commenting and docstring habits  
+- Error and exception handling  
+
+#### 5. Common Patterns  
+- Reusable utilities or base classes  
+- Design patterns or architectural approaches  
+- Frequently used idioms  
+
+#### 6. Do's and Don'ts  
+- ✅ Things developers should always do  
+- ❌ Common mistakes to avoid  
+
+#### 7. Tools & Dependencies  
+- Key libraries and their purpose  
+- Project setup instructions (if relevant)
+
+#### 8. Other Notes  
+- Anything important for an LLM to know when generating new code in this repo  
+- Special edge cases or constraints  
+
+## Step 4 - Output Rules  
+- Output the entire `best_practices.md` in a fenced `markdown` code block  
+- Do **not** include explanations or commentary outside the file  
+- Do **not** include irrelevant boilerplate  
+- Keep the format clean, readable, and structured for LLM reuse"""
+mcpServers = "{}"
+outOfTheBox = true
+outOfTheBoxName = "generate-best-practices"
