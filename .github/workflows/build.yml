@@ -1,0 +1,42 @@
+name: CI Build (produce ELF)
+
+on:
+  push:
+    branches: ["main", "master"]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain and target
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          targets: thumbv7em-none-eabihf
+          override: true
+
+      - name: Install required components (rust-src)
+        run: rustup component add rust-src || true
+
+      - name: Build release for embedded target
+        run: |
+          set -e
+          cargo build --release --target thumbv7em-none-eabihf
+
+      - name: Find and list build artifacts
+        run: |
+          echo "Artifacts in target directory:"
+          find target -type f -maxdepth 4 -print || true
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            target/thumbv7em-none-eabihf/release/**
+            target/*/release/**
