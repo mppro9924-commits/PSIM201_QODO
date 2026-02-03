@@ -13,20 +13,21 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain and target
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          profile: minimal
-          target: thumbv7em-none-eabihf
-          override: true
+          targets: thumbv7em-none-eabihf
+          components: rust-src
 
-      - name: Install required components (rust-src)
-        run: rustup component add rust-src || true
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: cargo-registry-${{ hashFiles('Cargo.lock') }}
+          restore-keys: cargo-registry-
 
       - name: Build release for embedded target
         run: |
-          set -e
-          cargo build --release --target thumbv7em-none-eabihf
+          cargo build --release --target thumbv7em-none-eabihf 2>&1
 
       - name: Find and list build artifacts
         run: |
