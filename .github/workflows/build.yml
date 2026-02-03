@@ -1,4 +1,4 @@
-name: CI Build (produce ELF)
+name: Arduino CLI Build
 
 on:
   push:
@@ -12,24 +12,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Rust toolchain and target
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: thumbv7em-none-eabihf
-          components: rust-src
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v1
 
-      - name: Build release for embedded target
+      - name: Install STM32 board support
         run: |
-          cargo build --release --target thumbv7em-none-eabihf
+          arduino-cli core install STMicroelectronics:stm32 --additional-urls https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json
+          arduino-cli board list
 
-      - name: Find ELF files
+      - name: Build sketch for STM32L432KC
         run: |
-          find target -name '*.elf' -o -name 'PSIM*' -o -name '*qodo*' 2>/dev/null | head -20
+          arduino-cli compile --fqbn STMicroelectronics:stm32:Nucleo_L432KC:upload_method=STLink,xserial=generic -v
 
-      - name: Upload release artifacts
+      - name: Find and list build artifacts
+        run: |
+          echo "Build artifacts:"
+          find . -name "*.elf" -o -name "*.bin" -o -name "*.hex" 2>/dev/null | head -20
+
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-artifacts
           path: |
-            target/thumbv7em-none-eabihf/release/
-            target/*/release/
+            build/**
+            ./**/*.elf
+            ./**/*.bin
