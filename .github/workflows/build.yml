@@ -17,7 +17,7 @@ jobs:
         with:
           toolchain: stable
           profile: minimal
-          targets: thumbv7em-none-eabihf
+          target: thumbv7em-none-eabihf
           override: true
 
       - name: Install required components (rust-src)
